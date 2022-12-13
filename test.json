@@ -1,0 +1,37 @@
+{
+    "NewEvent": {
+        "QuestData": {
+            "Quest": {
+                "GlobalEventInfo": {
+                    "Rules": [
+                        {
+                            "Key": "alwdalksdja",
+                            "Value": [
+                                {
+                                    "BlackMarketItem": {
+                                        "BlackMarketItemId" : "qwoeiruqoieru"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Key": "alwdalksdja",
+                            "Value": [
+                                {
+                                    "BlackMarketItem": {
+                                        "BlackMarketItemId" : "UniversalPoints"
+                                    }
+                                },
+                                {
+                                    "BlackMarketItem": {
+                                        "BlackMarketItemId" : "qwoeiruqoieru"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
