@@ -1,0 +1,179 @@
+Big Data
+
+Lab1
+
+docker-compose % docker build -t khai-bigdata-lab1 .
+docker run -it khai-bigdata-lab1 /opt/spark/bin/spark-shell
+
+val lines = sc.textFile("/include/README.md")
+val titleLines = lines.filter(line => line.contains("Python"))
+titleLines.collect
+
+val lines = sc.textFile("/include/fish_species.txt")
+val salmonLines = lines.filter(line => line.contains("salmon"))
+
+val numRDD7 = sc.parallelize(List(1, 2, 3, 4, 5, 6, 7))
+//Або:
+val numRDD7 = sc.parallelize(1 to 7)
+//Або:
+val numRDD7 = sc.parallelize(1 to 7 by 1)
+
+val numRDD8 = sc.parallelize(List(1, 2, 3, 4, 5, 6, 7, 8), 4)
+//Або:
+val numRDD8 = sc.parallelize(1 to 8, 4)
+//Або:
+val numRDD8 = sc.parallelize(1 to 8 by 1, 4)
+
+val a = sc.parallelize(1 to 10, 3)
+val b = a.filter(_ % 3 == 0)
+b.collect
+
+val a = sc.parallelize(2 to 20 by 3)
+val b = a.filter(_ % 2 == 0)
+a.collect
+b.collect
+
+val lines = sc.textFile("/include/README.md")
+val titleLines = lines.filter(line => line.contains("Scala"))
+titleLines.collect
+
+val c = sc.parallelize(List("John", "Jack", "Mike", "Jack"), 2)
+c.distinct.collect
+
+val c = sc.parallelize(List("John", "Jack", "Mike", "Jack"), 2)
+c.distinct.collect
+
+val lines = sc.textFile("/include/fish_species.txt")
+val salmonLines = lines.filter(line => line.contains("salmon"))
+lines.collect
+salmonLines.collect
+
+val x = sc.parallelize(1 to 10)
+val y = sc.parallelize(5 to 15)
+val z = x.intersection(y)
+z.collect
+
+val x = sc.parallelize(1 to 16)
+val y = sc.parallelize(5 to 13 by 2)
+val z = x.intersection(y)
+z.collect
+
+val a = sc.parallelize(3 to 7, 1)
+val b = sc.parallelize (7 to 9, 1)
+val c = a.union (b)
+c.collect
+(a ++ b).collect
+
+val a = sc.textFile("/include/fish_species_short.txt")
+val b = sc.textFile("/include/shellfish_species.txt")
+val c = a.union(b)
+c.collect
+(a ++ b).collect
+
+val x = sc.parallelize(List (1,2,3))
+val y = sc.parallelize(List (10,11,12))
+x.cartesian(y).collect
+
+val x = sc.parallelize(List (22,33,44))
+val y = sc.parallelize(List (55,66,77))
+x.cartesian(y).collect
+
+val input = sc.parallelize(List (1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString ( ","))
+
+val input = sc.parallelize(List (1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString ( ","))
+
+val input = sc.parallelize(List (5, 7, 11, 13))
+val result = input.map(x => x * x)
+println(result.collect().mkString ( ","))
+
+val lines = sc.parallelize(List ("hello world", "hi"))
+val words = lines.flatMap(line => line.split ( "")).collect
+
+val a = sc.parallelize(1 to 5, 4)
+a.flatMap(1 to _).collect
+
+sc.parallelize(List(5, 10, 20), 2).flatMap(x => List(x, x, x)).collect
+
+
+
+val lines = sc.parallelize(List ("The rose is red, the violet's blue, The honey's sweet, and so are you"))
+val words = lines.flatMap(line => line.split("")).collect
+
+val a = sc.parallelize(4 to 8 by 2, 4)
+a.flatMap(1 to _).collect
+
+sc.parallelize(List(2, 3, 5), 2).flatMap(x => List(1, 2, 3).map(y => scala.math.pow(x,y))).collect
+
+
+val flights = sc.parallelize(List(8,15,11,7,6, 20,23,18,14,11, 18,12,9,8,3, 9,11,15,12,10, 7,5,9,15,15, 6,4,1,2,5), 6)
+val sumOfFlights = flights.aggregate(0)(_+_, _+_)
+val sumOfMaximums = flights.aggregate(0)(Math.max(_, _), _+_)
+val maximum = flights.aggregate(0)(Math.max(_, _), Math.max (_, _))
+val flightsAndAirlines = flights.aggregate((0,0)) ((acc, value) => (acc._1 + value, acc._2 + 1), (acc1, acc2) => (acc1._1 + acc2._1, acc1._2 + acc2._2))
+val avg = flightsAndAirlines._1 / flightsAndAirlines._2.toDouble
+
+
+val a = sc.parallelize(List("black", "blue", "white", "green", "grey"), 2)
+16
+val b = a.map(x => (x.length, x))
+b.reduceByKey(_ + _).collect
+
+
+val a = sc.textFile("/include/england_counties_a_to_c.txt")
+val b = a.map(x => (x.split("")(0), x))
+b.reduceByKey(_+_).collect
+
+val a = sc.parallelize(List("black", "blue", "white", "green", "grey"), 2)
+val b = a.keyBy(_.length)
+b.groupByKey.collect
+b.countByKey
+b.groupByKey.collectAsMap
+b.lookup(3)
+b.lookup(4)
+
+val a = sc.textFile("/include/planets.txt", 2)
+val b = a.keyBy(_.length)
+b.groupByKey.collect
+b.countByKey
+b.groupByKey.collectAsMap
+b.lookup(3)
+b.lookup(4)
+
+
+val a = sc.parallelize(List("black", "blue", "white", "green", "grey"), 2)
+val b = a.map(x => (x.length, x))
+b.keys.collect
+
+val a = sc.textFile("/include/european_countries_a_to_g.txt")
+val b = a.map(x => (x.length, x))
+b.collect
+b.keys.collect
+
+
+val a = sc.parallelize(List("blue", "green", "orange"), 3)
+val b = a.keyBy(_.length)
+val c = sc.parallelize(List("black", "white", "grey"), 3)
+val d = c.keyBy(_.length)
+b.join(d).collect
+
+val a = sc.parallelize(List("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado"), 3)
+val b = a.keyBy(_.length)
+val c = sc.parallelize(List("Markers", "Pens", "NoteBooks", "Pencils", "Papers", "Staplers"), 3)
+val d = c.keyBy(_.length)
+b.join(d).collect
+
+val a = sc.parallelize(List("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado"), 3)
+val b = a.keyBy(_.length)
+val c = sc.parallelize(List("Markers", "Pens", "NoteBooks", "Pencils", "Papers", "Staplers"), 3)
+val d = c.keyBy(_.length)
+b.leftOuterJoin(d).collect
+
+val a = sc.parallelize(List("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado"), 3)
+val b = a.keyBy(_.length)
+val c = sc.parallelize(List("Markers", "Pens", "NoteBooks", "Pencils", "Papers", "Staplers"), 3)
+val d = c.keyBy(_.length)
+b.rightOuterJoin(d).collect
